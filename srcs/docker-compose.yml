@@ -7,10 +7,10 @@ services:
     ports:
       - 443:443
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress_data:/srv/www/html
     restart: always
     networks:
-      - inception-net
+      - word-nginx
 
   mariadb:
     container_name: mariadb
@@ -23,7 +23,7 @@ services:
     expose:
       - 3306
     networks:
-      - inception-net
+      - mariadb-word
     restart: always
     env_file:
       - .env
@@ -42,9 +42,10 @@ services:
     env_file:
       - .env
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress_data:/srv/www/html
     networks:
-      - inception-net
+      - mariadb-word
+      - word-nginx
 
 #BONUS PART
 #  redis:
@@ -58,7 +59,7 @@ services:
 #    env_file:
 #      - .env
 #    volumes:
-#      - wordpress_data:/var/www/html
+#      - wordpress_data:/srv/www/html
 #    networks:
 #      - network
 #
@@ -69,7 +70,7 @@ services:
 #      - "21:21"
 #      - "21100-21110:21100-21110"
 #    volumes:
-#      - "wordpress_data:/var/www/html"
+#      - "wordpress_data:/srv/www/html"
 #    networks:
 #      - network
 #    restart: always
@@ -116,5 +117,7 @@ volumes:
     #      o: bind
 
 networks:
-  inception-net:
+  mariadb-word:
+    driver: bridge
+  word-nginx:
     driver: bridge

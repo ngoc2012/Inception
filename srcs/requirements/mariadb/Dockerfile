@@ -5,6 +5,7 @@ RUN apt-get update
 RUN apt-get install -y mariadb-server \
     mariadb-client
 #    && rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y iputils-ping inetutils-traceroute iproute2 curl telnet dnsutils
 
 #Allow to run the daemon of mysql
 # Purge and re-create /var/lib/mysql with appropriate ownership
