@@ -2,7 +2,7 @@ FROM	debian:buster
 
 RUN	apt-get update
 RUN	apt-get install -y nginx openssl # Install nginx and openssl
-RUN	apt-get install -y iputils-ping inetutils-traceroute iproute2 curl telnet dnsutils
+#RUN	apt-get install -y iputils-ping inetutils-traceroute iproute2 curl telnet dnsutils
 
 RUN mkdir /etc/nginx/ssl
 

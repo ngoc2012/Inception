@@ -7,10 +7,12 @@ services:
     ports:
       - 443:443
     volumes:
-      - wordpress_data:/srv/www/html
+      - wordpress_data:/srv/www/wordpress
     restart: always
     networks:
-      - word-nginx
+      - net
+        #    networks:
+        #      - word-nginx
 
   mariadb:
     container_name: mariadb
@@ -23,7 +25,9 @@ services:
     expose:
       - 3306
     networks:
-      - mariadb-word
+      - net
+        #    networks:
+        #      - mariadb-word
     restart: always
     env_file:
       - .env
@@ -31,21 +35,21 @@ services:
   wordpress:
     container_name: wordpress
     #Create a depedency between the 2 container, db will be launched before
-    depends_on:
-      - mariadb
-    build:
-      context: ./requirements/wordpress
-      dockerfile: Dockerfile
+    #depends_on:
+    #  - mariadb
+    build: ./requirements/wordpress
     ports:
       - 9000:9000
     restart: always
     env_file:
       - .env
     volumes:
-      - wordpress_data:/srv/www/html
+      - wordpress_data:/srv/www/wordpress
     networks:
-      - mariadb-word
-      - word-nginx
+      - net
+        #    networks:
+        #      - mariadb-word
+        #      - word-nginx
 
 #BONUS PART
 #  redis:
@@ -117,6 +121,8 @@ volumes:
     #      o: bind
 
 networks:
+  net:
+    driver: bridge
   mariadb-word:
     driver: bridge
   word-nginx:
