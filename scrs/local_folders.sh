@@ -6,10 +6,10 @@ while read -r LINE; do
     fi
 done < .env
 
-if $ test -d $MYSQL_FOLDER; then
+if ! test -d $MYSQL_FOLDER; then
     mkdir -p $MYSQL_FOLDER
 fi
 
-if $ test -d $WORDPRESS_FOLDER; then
+if ! test -d $WORDPRESS_FOLDER; then
     mkdir -p $WORDPRESS_FOLDER
 fi
