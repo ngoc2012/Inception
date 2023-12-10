@@ -1,10 +1,16 @@
 FROM debian:buster
 
 #RUN apt-get update
-RUN apt-get install -y mariadb-server \
-    mariadb-client \
-    vim \
-    && rm -rf /var/lib/apt/lists/*
+#RUN apt-get install -y mariadb-server \
+#    mariadb-client \
+#    vim \
+#    && rm -rf /var/lib/apt/lists/*
+RUN apt update
+RUN apt install mariadb-server
+#RUN apt install mariadb-server
+#    mariadb-client \
+#    vim \
+#    && rm -rf /var/lib/apt/lists/*
 
 #Allow to run the daemon of mysql
 # Purge and re-create /var/lib/mysql with appropriate ownership
