@@ -6,7 +6,7 @@ FROM debian:buster
 #    vim \
 #    && rm -rf /var/lib/apt/lists/*
 RUN apt update
-RUN apt install mariadb-server
+RUN apt-get install mariadb-server
 #RUN apt install mariadb-server
 #    mariadb-client \
 #    vim \
