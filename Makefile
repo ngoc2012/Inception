@@ -9,7 +9,7 @@ stop:
 	@sudo docker stop $$(sudo docker ps)
 
 remove_con:
-	@sudo docker rn -f $$(sudo docker ps -a -q)
+	@sudo docker rm -f $$(sudo docker ps -a -q)
 
 remove_images:
 	@sudo docker image prune --all --force
