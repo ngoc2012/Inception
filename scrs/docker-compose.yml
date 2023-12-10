@@ -106,13 +106,13 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/vbachele/data/mysql
+      device: ${MYSQL_FOLDER}
       o: bind
   wordpress_data:
     driver: local
     driver_opts:
       type: none
-      device: /home/vbachele/data/wordpress
+      device: ${WORDPRESS_FOLDER}
       o: bind
 
 networks:

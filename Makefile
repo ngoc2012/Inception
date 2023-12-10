@@ -1,4 +1,5 @@
 all:
+	@bash local_folders.sh
 	@sudo docker compose -f ./scrs/docker-compose.yml up -d --build
 
 down:
