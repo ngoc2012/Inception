@@ -78,6 +78,71 @@ curl https://wordpress.org/latest.tar.gz | tar zx -C /srv/www
 ```
 
 ## Host name
+
+### systemd-resolved
+
+[Wiki](https://wiki.archlinux.org/title/systemd-resolved)
+
+Check if systemd-resolved is installed:
+Make sure that the systemd-resolved package is installed on your Debian system. You can use the following command to check and install it:
+
+```console
+sudo apt-get update
+sudo apt-get install systemd-resolved
+```
+
+Verify the service status:
+After installation, check the status of the systemd-resolved service to ensure that it is running. Use the following command:
+
+```console
+sudo systemctl status systemd-resolved
+```
+
+If the service is not running, start it using:
+
+```console
+sudo systemctl start systemd-resolved
+```
+
+Enable the service:
+Ensure that the systemd-resolved service is enabled to start at boot time:
+
+```console
+sudo systemctl enable systemd-resolved
+```
+
+Check for errors in the logs:
+Review the system logs for any error messages related to systemd-resolved. You can use the journalctl command to view the system logs:
+
+```console
+journalctl -xe | grep systemd-resolved
+```
+
+Look for any error messages or information that may indicate the cause of the issue.
+
+Restart the systemd-resolved service:
+Sometimes, simply restarting the service can resolve certain issues. Use the following commands to restart the systemd-resolved service:
+
+```console
+sudo systemctl restart systemd-resolved
+```
+
+
+The resolver can be configured by editing `/etc/systemd/resolved.conf` and/or drop-in .conf files in `/etc/systemd/resolved.conf.d/`. See [resolved.conf](https://man.archlinux.org/man/resolved.conf.5).
+
+To use systemd-resolved `start` and `enable` systemd-resolved.service.
+
+```console
+systemctl status systemd-resolved
+systemctl stop systemd-resolved
+systemctl disable systemd-resolved
+```
+```console
+cat /etc/resolv.conf
+```
+
+### Configuration DNS
+
 ```console
 sudo vim /etc/hosts
 ```
@@ -94,20 +159,6 @@ systemctl restart systemd-resolved
 
 ### systemd-resolved
 
-[Wiki](https://wiki.archlinux.org/title/systemd-resolved)
-
-The resolver can be configured by editing `/etc/systemd/resolved.conf` and/or drop-in .conf files in `/etc/systemd/resolved.conf.d/`. See [resolved.conf](https://man.archlinux.org/man/resolved.conf.5).
-
-To use systemd-resolved `start` and `enable` systemd-resolved.service.
-
-```console
-systemctl status systemd-resolved
-systemctl stop systemd-resolved
-systemctl disable systemd-resolved
-```
-```console
-cat /etc/resolv.conf
-```
 
 ## References
 
