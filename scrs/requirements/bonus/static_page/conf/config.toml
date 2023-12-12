@@ -1,4 +1,4 @@
-#baseURL = "https://vbachele.42.fr/static"
+#baseURL = "https://minh-ngu.42.fr/static"
 title = "42 fitness"
 theme = "m10c"
 paginate = 8
@@ -17,10 +17,10 @@ canonifyURLs = true
     weight = 2
 
 [params]
-  author = "Vincent Bachelet"
+  author = "Nguyen Minh Ngoc"
   description = "Student @42Paris && fitness addict"
   menu_item_separator = " - "
   [[params.social]]
     icon = "github"
     name = "Github"
-    url = "https://github.com/vincentbachelet-collab"
+    url = "https://github.com/ngoc2012"
