@@ -41,6 +41,10 @@ services:
     restart: always
     env_file:
       - .env
+    environment:
+      WORDPRESS_ADMIN_USER: ${WORDPRESS_ADMIN_USER}
+      WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
+      WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
     volumes:
       - wordpress_data:/var/www/html
     networks:
