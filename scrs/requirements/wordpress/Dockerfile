@@ -1,42 +1,53 @@
-FROM debian:buster
+# Use Alpine Linux as the base image
+FROM alpine:latest
 
-RUN apt-get update && apt-get -y install \
-	wget \
-	curl \
-	bash \
-	php \
-	php-cgi \
-	php-mysql \
-	php-fpm \
-	php-pdo \
-	php-gd php-cli \
-	php-mbstring \
-	redis \
-	php-redis \
-	&& rm -rf /var/lib/apt/lists/*
+# Install necessary packages
+RUN apk --no-cache update && \
+    apk --no-cache add \
+        php7 \
+        php7-fpm \
+        php7-mysqli \
+        php7-json \
+        php7-xml \
+        php7-curl \
+        php7-gd \
+        php7-mbstring \
+        php7-session \
+        php7-simplexml \
+        php7-openssl \
+        php7-dom \
+        php7-zip \
+        php7-tokenizer \
+        php7-xmlwriter \
+        php7-fileinfo \
+        php7-xmlreader \
+        php7-pdo \
+        php7-pdo_mysql \
+        php7-pdo_sqlite \
+        php7-phar \
+        php7-ctype \
+        php7-iconv \
+        php7-opcache \
+        curl \
+        tar \
+        unzip
 
-# I need to install wp_cli command and put it in the right directory /usr/local/bin
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-  && chmod +x wp-cli.phar \
-  && mv wp-cli.phar /usr/local/bin/wp
+# Create a directory for WordPress
+RUN mkdir -p /var/www/html
 
-# Copy the .conf in the html directory
-COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
+# Download and extract WordPress
+RUN curl -O https://wordpress.org/latest.tar.gz && \
+    tar -xzf latest.tar.gz -C /var/www/html --strip-components=1 && \
+    rm latest.tar.gz
 
-#Create the folder to enable php start
-RUN mkdir /run/php
+# Set the ownership of the WordPress directory
+RUN chown -R nobody:nogroup /var/www/html
 
-#we copy the script, give the right to launch it in local on our computer
-COPY ./tools/create_wordpress.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/create_wordpress.sh
-ENTRYPOINT ["/usr/local/bin/create_wordpress.sh"]
+# Define the volume for persistent data
+VOLUME /var/www/html/wp-content
 
-#We go the html directory
-WORKDIR /var/www/html/
-
-#We expose the 9000 port
+# Expose port 9000 for PHP-FPM
 EXPOSE 9000
 
-#Launch PHP FPM in foreground and ignore deamonize from conf file (-F)
-CMD ["/usr/sbin/php-fpm7.3", "-F"]
-
+# Set the entry point to start PHP-FPM
+ENTRYPOINT ["php-fpm7", "-F"]

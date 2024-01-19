@@ -9,9 +9,13 @@ services:
     #  - redis
     #  - hugo
     ports:
+      - 80:80
       - 443:443
+################## ATTETION #######################
+#Your volumes will be available in the /home/login/data folder of the host machine using Docker
     volumes:
-      - wordpress_data:/var/www/html
+    #  - /home/ngoc/Inception/www:/usr/share/nginx/html
+      - wordpress_data:/usr/share/nginx/html
     restart: always
     networks:
       - network
@@ -30,24 +34,24 @@ services:
   #  env_file:
   #    - .env
 #
-  #wordpress:
-  #  container_name: wordpress
-  #  #depends_on:
-  #  #  - mariadb
-  #  build:
-  #    context: ./requirements/wordpress
-  #    dockerfile: Dockerfile
-  #  restart: always
-  #  env_file:
-  #    - .env
-  #  environment:
-  #    WORDPRESS_ADMIN_USER: ${WORDPRESS_ADMIN_USER}
-  #    WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
-  #    WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
-  #  volumes:
-  #    - wordpress_data:/var/www/html
-  #  networks:
-  #    - network
+  wordpress:
+    container_name: wordpress
+    #depends_on:
+    #  - mariadb
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - .env
+    #environment:
+    #  WORDPRESS_ADMIN_USER: ${WORDPRESS_ADMIN_USER}
+    #  WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
+    #  WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - network
 
 #BONUS PART
   #redis:
@@ -105,18 +109,18 @@ services:
   #    - network
 
 volumes:
-  mariadb_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${MYSQL_FOLDER}
-      o: bind
   wordpress_data:
     driver: local
     driver_opts:
       type: none
       device: ${WORDPRESS_FOLDER}
       o: bind
+#  mariadb_data:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: ${MYSQL_FOLDER}
+#      o: bind
 
 networks:
   network:
