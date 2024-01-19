@@ -4,7 +4,8 @@ services:
   nginx:
     container_name: nginx
     build: ./requirements/nginx
-    #depends_on:
+    depends_on:
+      - wordpress
     #  - adminer
     #  - redis
     #  - hugo
@@ -48,6 +49,8 @@ services:
     #  WORDPRESS_ADMIN_USER: ${WORDPRESS_ADMIN_USER}
     #  WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
     #  WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
+    ports:
+      - 9000:9000
     volumes:
       - wordpress_data:/var/www/html
     networks:

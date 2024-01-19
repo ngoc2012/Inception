@@ -67,6 +67,11 @@ sudo mkdir -p /var/lib/mysql
 
 [Docker on Wordpress](https://github.com/docker/awesome-compose/tree/master/official-documentation-samples/wordpress/)
 
+```console
+service php7.4-fpm status
+curl -I http://localhost:9000/status
+```
+
 * Check file owner:
 ```console
 stat -c "%U %G" /var/www/html
