@@ -70,6 +70,22 @@ sudo mkdir -p /var/lib/mysql
 ```console
 service php7.4-fpm status
 curl -I http://localhost:9000/status
+
+/etc/php/7.4/fpm
+
+cat /var/log/php7.4-fpm.log
+/etc/init.d/php7.4-fpm status
+tail -f /var/log/fpm-php.www.log
+ls /var/www/html
+
+cat /var/log/nginx/access.log
+cat /var/log/nginx/error.log
+
+sudo docker exec -it nginx sh
+sudo docker exec -it wordpress sh
+sudo docker inspect wordpress
+
+ls /var/www/html
 ```
 
 * Check file owner:

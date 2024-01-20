@@ -1,44 +1,42 @@
-# Use Debian as the base image
-FROM debian:bullseye-slim
+FROM debian:buster
 
-# Install necessary packages
-RUN apt-get update && \
-    apt-get install -y \
-        php7.4 \
-        php7.4-fpm \
-        php7.4-mysql \
-        php7.4-json \
-        php7.4-xml \
-        php7.4-curl \
-        php7.4-gd \
-        php7.4-mbstring \
-        php7.4-zip \
-        php7.4-opcache \
-        curl \
-        tar \
-        unzip
+RUN apt-get update && apt-get -y install \
+	wget \
+	curl \
+	bash \
+	php \
+	php-cgi \
+	php-mysql \
+	php-fpm \
+	php-pdo \
+	php-gd php-cli \
+	php-mbstring \
+	redis \
+	php-redis \
+	&& rm -rf /var/lib/apt/lists/*
 
-## Create a directory for WordPress
+## Create a directory for WordPress for the first time
 #RUN mkdir -p /var/www/html
-#
-## Download and extract WordPress
 #RUN curl -O https://wordpress.org/latest.tar.gz && \
 #    tar -xzf latest.tar.gz -C /var/www/html --strip-components=1 && \
 #    rm latest.tar.gz
 
-COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+  && chmod +x wp-cli.phar \
+  && mv wp-cli.phar /usr/local/bin/wp
+
+COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
 
 #Create the folder to enable php start
 RUN mkdir /run/php
 
-## Set the ownership of the WordPress directory
-#RUN chown -R www-data:www-data /var/www/html
-#
-## Define the volume for persistent data
-#VOLUME /var/www/html/wp-content
+COPY ./tools/wordpress.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/wordpress.sh
+ENTRYPOINT ["/usr/local/bin/wordpress.sh"]
 
-# Expose port 9000 for PHP-FPM
+WORKDIR /var/www/html/
+
 EXPOSE 9000
 
-# Set the entry point to start PHP-FPM
-CMD ["php-fpm7.4", "-F"]
+#Launch PHP FPM in foreground and ignore deamonize from conf file (-F)
+CMD ["/usr/sbin/php-fpm7.3", "-F"]

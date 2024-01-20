@@ -1,9 +1,11 @@
 all:
-	@cd scrs && bash local_folders.sh
 	@sudo docker compose -f ./scrs/docker-compose.yml up -d --build
 
 down:
 	@sudo docker compose -f ./scrs/docker-compose.yml down
+
+up:
+	@sudo docker compose -f scrs/docker-compose.yml up -d --build
 
 stop:
 	@sudo docker stop $$(sudo docker ps)
@@ -14,8 +16,18 @@ remove_con:
 remove_images:
 	@sudo docker image prune --all --force
 
+remove_folders:
+	@$(shell cd scrs && bash rm_folders.sh)
+
+create_folders:
+	@$(shell cd scrs && bash create_folders.sh)
+
 re:
-	@sudo docker compose -f scrs/docker-compose.yml up -d --build
+	@make down
+	@make remove_images
+	@make remove_folders
+	@make create_folders
+	@make up
 
 clean:
 	@sudo docker stop $$(docker ps -qa);\

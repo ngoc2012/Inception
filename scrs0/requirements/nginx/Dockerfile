@@ -1,8 +1,11 @@
-FROM	debian:buster
+# Use the official Alpine Linux image
+FROM alpine:latest
 
-#install all the program
-RUN		apt-get update
-RUN		apt-get install -y nginx openssl
+# Install Nginx and OpenSSL
+RUN apk --no-cache add nginx openssl
+
+# Set the working directory to the default Nginx web root
+WORKDIR /usr/share/nginx/html
 
 # Create SSL directory
 RUN mkdir -p /etc/nginx/ssl
@@ -14,9 +17,7 @@ RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
     -subj "/C=FR/ST=Paris/L=Paris/O=42 School/OU=minh-ngu/CN=minh-ngu/"
 
 # Copy your custom Nginx configuration file to the container
-COPY ./conf/nginx.conf /etc/nginx/conf.d
-
-RUN mkdir -p /run/nginx
+COPY ./conf/nginx.conf /etc/nginx/
 
 # Expose ports 80 and 443 for HTTP and HTTPS, respectively
 EXPOSE 80
