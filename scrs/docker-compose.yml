@@ -6,12 +6,7 @@ services:
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
-    #  no_cache: true
-    depends_on:
-      - wordpress
-    #  - adminer
-    #  - redis
-    #  - hugo
+      no_cache: false
     ports:
       - 80:80
       - 443:443
@@ -23,7 +18,10 @@ services:
 
   mariadb:
     container_name: mariadb
-    build: ./requirements/mariadb
+    build:
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
+      no_cache: false
     volumes:
       - mariadb_data:/var/lib/mysql
     ports:
@@ -41,7 +39,7 @@ services:
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
-    #  no_cache: true
+      no_cache: false
     restart: always
     env_file:
       - .env
@@ -51,61 +49,6 @@ services:
       - wordpress_data:/var/www/html
     networks:
       - network
-
-#BONUS PART
-  #redis:
-  #  container_name: redis
-  #  build: ./requirements/bonus/redis
-  #  depends_on:
-  #    - wordpress
-  #  ports:
-  #   - '6379:6379'
-  #  restart: always
-  #  env_file:
-  #    - .env
-  #  volumes:
-  #    - wordpress_data:/var/www/html
-  #  networks:
-  #    - network
-#
-  #ftp-server:
-  #  build: requirements/bonus/ftp_server
-  #  container_name: ftp-server
-  #  ports:
-  #    - "21:21"
-  #    - "21100-21110:21100-21110"
-  #  volumes:
-  #    - "wordpress_data:/var/www/html"
-  #  networks:
-  #    - network
-  #  restart: always
-  #  environment:
-  #    FTP_USR: ${FTP_USR}
-  #    FTP_PWD: ${FTP_PWD}
-
-  #adminer:
-  #  build: ./requirements/bonus/adminer
-  #  restart: always
-  #  depends_on:
-  #    - mariadb
-  #  expose:
-  #   - "9000"
-  #  networks:
-  #    - network
-#
-  #hugo:
-  #  container_name: hugo
-  #  build: ./requirements/bonus/hugo
-  #  restart: always
-  #  networks:
-  #    - network
-#
-  #static_page:
-  #  container_name: static_page
-  #  build: ./requirements/bonus/static_page
-  #  restart: always
-  #  networks:
-  #    - network
 
 volumes:
   wordpress_data:

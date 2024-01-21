@@ -12,8 +12,8 @@ result=$(mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "SHOW DATABASES LIKE '$MYS
 # Check if the result contains the database name
 if [[ "$result" == *"$MYSQL_DATABASE"* ]]; then
     echo "Database '$MYSQL_DATABASE' exists."
-	exit 0
-fi
+else
+
 
 #if [ -d "/var/lib/mysql/$MYSQL_DATABASE" ]; then 
 #	echo "Database already exists"
@@ -25,15 +25,23 @@ echo "mariadb-server-10.3 mysql-server/root_password password $MYSQL_ROOT_PASSWO
 echo "mariadb-server-10.3 mysql-server/root_password_again password $MYSQL_ROOT_PASSWORD" | debconf-set-selections
 
 # Run MySQL initialization scripts
+echo "Starting MySQL service..."
 service mysql start
+echo "MySQL service started."
 
 # Perform variable substitution and execute the SQL script
 #envsubst < /usr/local/bin/init.sql | mariadb -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -h #"$MYSQL_HOSTNAME" -P "$3306"
 #envsubst < /usr/local/bin/init.sql
-envsubst < /usr/local/bin/init.sql | mariadb -u root -p"$MYSQL_ROOT_PASSWORD" -h "$MYSQL_HOSTNAME" -P "3306"
+echo "Attempting to connect to MySQL server..."
+#envsubst < /usr/local/bin/init.sql | mariadb -u root -p"$MYSQL_ROOT_PASSWORD" -h "$MYSQL_HOSTNAME" -P "3306"
+envsubst < /usr/local/bin/init.sql | mysql -u root
+echo "Connected to MySQL server."
 
 #mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "source /usr/local/bin/init.sql"
 
 # Stop MySQL service to let the CMD start it properly
 service mysql stop
 
+fi
+
+exec "$@"

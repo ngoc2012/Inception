@@ -15,12 +15,6 @@ RUN apt-get update && apt-get -y install \
 	php-redis \
 	&& rm -rf /var/lib/apt/lists/*
 
-## Create a directory for WordPress for the first time
-#RUN mkdir -p /var/www/html
-#RUN curl -O https://wordpress.org/latest.tar.gz && \
-#    tar -xzf latest.tar.gz -C /var/www/html --strip-components=1 && \
-#    rm latest.tar.gz
-
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
   && chmod +x wp-cli.phar \
   && mv wp-cli.phar /usr/local/bin/wp
@@ -29,6 +23,12 @@ COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
 
 #Create the folder to enable php start
 RUN mkdir /run/php
+
+#RUN mkdir -p /var/www/html
+#RUN chown -R www-data:www-data /var/www/html/
+
+# Set appropriate permissions for the PHP-FPM user
+#RUN usermod -u 1000 www-data
 
 COPY ./tools/wordpress.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/wordpress.sh

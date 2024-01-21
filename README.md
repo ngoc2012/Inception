@@ -86,6 +86,14 @@ sudo docker exec -it wordpress sh
 sudo docker inspect wordpress
 
 ls /var/www/html
+
+service mysql status
+SHOW DATABASES;
+
+SHOW TABLES FROM wordpress;
+
+USE your_database;
+SHOW TABLES;
 ```
 
 * Check file owner:

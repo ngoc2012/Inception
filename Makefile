@@ -22,11 +22,13 @@ remove_folders:
 create_folders:
 	@$(shell cd scrs && bash create_folders.sh)
 
+format:
+	@make remove_folders
+	@make create_folders
+
 re:
 	@make down
 	@make remove_images
-	@make remove_folders
-	@make create_folders
 	@make up
 
 clean:
