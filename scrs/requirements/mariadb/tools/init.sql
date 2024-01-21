@@ -6,19 +6,4 @@ GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ROOT_NAME'@'%' WITH GRANT OPTION;
 CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
 GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';
 
----- create_table_and_insert_data.sql
---USE $MYSQL_DATABASE;
---
----- Create a sample table
---CREATE TABLE IF NOT EXISTS $MYSQL_DATABASE (
---    id INT PRIMARY KEY,
---    name VARCHAR(255)
---);
---
----- Insert some sample data
---INSERT INTO your_table_name (id, name) VALUES
---(1, 'John Doe'),
---(2, 'Jane Smith');
-
-
 FLUSH PRIVILEGES;

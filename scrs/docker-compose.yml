@@ -50,6 +50,22 @@ services:
     networks:
       - network
 
+  pong:
+    container_name: pong
+    build:
+      context: ./requirements/bonus/pong
+      dockerfile: Dockerfile
+      no_cache: false
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
+    volumes:
+      - bonus_data:/app
+    networks:
+      - network
+
 volumes:
   wordpress_data:
     driver: local
@@ -62,6 +78,12 @@ volumes:
     driver_opts:
       type: none
       device: ${MYSQL_FOLDER}
+      o: bind
+  bonus_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${BONUS_FOLDER}
       o: bind
 
 networks:
