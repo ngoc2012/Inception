@@ -21,7 +21,8 @@ RUN apt-get update \
 COPY ./conf/requirements.txt /app/
 RUN pip3 install --upgrade pip \
     && pip3 install Django && \
-    pip3 install channels daphne
+    pip3 install channels daphne \
+    && pip3 install requests
 
 # Set the working directory
 WORKDIR /app/backend
@@ -31,4 +32,3 @@ EXPOSE 8000
 
 # Run Daphne as the default command
 CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
-#CMD ["daphne", "-u", "asgi:application", "--port", "8000", "--bind", "0.0.0.0"]

@@ -221,3 +221,66 @@ Port 22
 ssh minh-ngu@$192.168.2.5 -p 22
 ssh minh-ngu@127.0.0.1 -p 4242
 ```
+
+## Redis
+
+### Plugins
+    To enable Redis caching for WordPress, you typically need to install and activate a Redis Object Cache plugin. The Redis Object Cache plugin acts as a bridge between WordPress and the Redis server, allowing WordPress to store and retrieve cached data using Redis.
+
+Here are the general steps to set up Redis caching for WordPress:
+
+1. **Install Redis Server:**
+   Make sure you have a Redis server installed and running. You can install Redis on the same server where WordPress is hosted or on a different server. Adjust the Redis configuration to fit your needs.
+
+2. **Install Redis Object Cache Plugin:**
+   Install a Redis Object Cache plugin from the WordPress Plugin Directory. One popular choice is the "Redis Object Cache" plugin. You can install it through the WordPress admin dashboard by going to "Plugins" -> "Add New" and searching for "Redis Object Cache."
+
+3. **Activate the Plugin:**
+   Once the plugin is installed, activate it through the WordPress admin dashboard. You can find the activated plugin in the "Plugins" section.
+
+4. **Configure the Plugin:**
+   Depending on the Redis Object Cache plugin you choose, you may need to configure its settings. In most cases, you'll need to specify the Redis server details, such as host and port. This information should match the configuration of your Redis server.
+
+5. **Verify Caching:**
+   After activating and configuring the Redis Object Cache plugin, you can verify that Redis caching is working by checking the plugin's status or using tools like the "Site Health" feature in the WordPress admin dashboard.
+
+Remember that using Redis for object caching can significantly improve the performance of your WordPress site, especially in scenarios with high traffic or resource-intensive operations.
+
+
+
+## Test ftp
+To test your FTP Docker container, you can use an FTP client to connect to the server and perform some basic operations. Here's a step-by-step guide:
+
+1. **Install an FTP Client:**
+   - If you're using a desktop computer, you can install an FTP client like FileZilla, WinSCP, or Cyberduck.
+   - For the command line, you can use the built-in `ftp` command on Unix-based systems or install an FTP client like `lftp`.
+
+2. **Run Your FTP Docker Container:**
+   ```bash
+   docker-compose up -d
+   ```
+
+3. **Connect Using FTP Client:**
+   - Open your FTP client and enter the following details:
+     - Host/Server: Use the IP address or hostname of your machine where the Docker containers are running.
+     - Port: 21 (the default FTP port).
+     - Username: The FTP username you specified in your Docker Compose file (e.g., `your_ftp_user`).
+     - Password: The FTP password you specified in your Docker Compose file (e.g., `your_ftp_password`).
+   - Connect to the server.
+
+4. **Perform Basic Operations:**
+   - Once connected, you can navigate through the directories and perform basic file upload/download operations.
+   - Test creating, deleting, or modifying files within the FTP server directory.
+
+5. **Verify Docker Container Logs:**
+   - Check the logs of your FTP Docker container to ensure there are no errors or issues:
+     ```bash
+     docker-compose logs ftp-server
+     ```
+
+6. **Check Permissions:**
+   - Ensure that the permissions of the mounted volume in your WordPress container (`./wordpress`) are suitable for both the WordPress application and the FTP server.
+
+Remember to replace placeholders like `your_ftp_user` and `your_ftp_password` with the actual values you used in your Docker Compose file.
+
+This process helps you confirm that your FTP server is set up correctly and that you can access it using the provided credentials.

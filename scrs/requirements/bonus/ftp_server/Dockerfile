@@ -5,5 +5,5 @@ RUN	apk update && apk upgrade && apk add --no-cache \
 
 COPY conf/vsftpd.conf /tmp/vsftpd.conf
 
-COPY tools/server_ftp.sh /tmp/server_ftp.sh
-ENTRYPOINT ["sh", "/tmp/server_ftp.sh"]
+COPY tools/ftp.sh /tmp/ftp.sh
+ENTRYPOINT ["sh", "/tmp/ftp.sh"]

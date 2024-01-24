@@ -60,12 +60,67 @@ services:
     env_file:
       - .env
     ports:
-      - 8000:8000
+      - 8000:80
     volumes:
-      - bonus_data:/app
+      - pong_data:/app
+    networks:
+      - network
+  
+  cv:
+    container_name: cv
+    build:
+      context: ./requirements/bonus/CV
+      dockerfile: Dockerfile
+      no_cache: false
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 8001:80
+    volumes:
+      - cv_data:/var/www/html
+    networks:
+      - network
+      
+  redis:
+    container_name: redis
+    build: ./requirements/bonus/redis
+    depends_on:
+      - wordpress
+    ports:
+     - '6379:6379'
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - wordpress_data:/var/www/html
     networks:
       - network
 
+  ftp-server:
+    build: requirements/bonus/ftp_server
+    container_name: ftp-server
+    ports:
+      - "21:21"
+      - "21100-21110:21100-21110"
+    volumes:
+      - "wordpress_data:/var/www/html"
+    networks:
+      - network
+    restart: always
+    environment:
+      FTP_USR: ${FTP_USR}
+      FTP_PWD: ${FTP_PWD}
+
+  adminer:
+    build: ./requirements/bonus/adminer
+    restart: always
+    depends_on:
+      - mariadb
+    expose:
+     - "9000"
+    networks:
+      - network
 volumes:
   wordpress_data:
     driver: local
@@ -79,11 +134,17 @@ volumes:
       type: none
       device: ${MYSQL_FOLDER}
       o: bind
-  bonus_data:
+  pong_data:
     driver: local
     driver_opts:
       type: none
-      device: ${BONUS_FOLDER}
+      device: ${PONG_FOLDER}
+      o: bind
+  cv_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${CV_FOLDER}
       o: bind
 
 networks:
