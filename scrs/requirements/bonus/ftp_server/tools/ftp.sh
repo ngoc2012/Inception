@@ -10,6 +10,7 @@ if [ ! -f "/etc/vsftpd/vsftpd.conf.bak" ]; then
     # Add the FTP_USER, change his password and declare him as the owner of wordpress folder and all subfolders
     adduser $FTP_USR --disabled-password
     echo "$FTP_USR:$FTP_PWD" | /usr/sbin/chpasswd &> /dev/null
+    echo "Set owner to folder"
     chown -R $FTP_USR:$FTP_USR /var/www/html
 
 	#chmod +x /etc/vsftpd/vsftpd.conf

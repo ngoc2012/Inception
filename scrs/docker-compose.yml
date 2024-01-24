@@ -81,10 +81,13 @@ services:
       - cv_data:/var/www/html
     networks:
       - network
-      
+
   redis:
     container_name: redis
-    build: ./requirements/bonus/redis
+    build:
+      context: ./requirements/bonus/redis
+      dockerfile: Dockerfile
+      no_cache: false
     depends_on:
       - wordpress
     ports:
@@ -98,7 +101,10 @@ services:
       - network
 
   ftp-server:
-    build: requirements/bonus/ftp_server
+    build:
+      context: ./requirements/bonus/ftp_server
+      dockerfile: Dockerfile
+      no_cache: true
     container_name: ftp-server
     ports:
       - "21:21"
@@ -118,9 +124,10 @@ services:
     depends_on:
       - mariadb
     expose:
-     - "9000"
+     - "8080"
     networks:
       - network
+
 volumes:
   wordpress_data:
     driver: local

@@ -284,3 +284,115 @@ To test your FTP Docker container, you can use an FTP client to connect to the s
 Remember to replace placeholders like `your_ftp_user` and `your_ftp_password` with the actual values you used in your Docker Compose file.
 
 This process helps you confirm that your FTP server is set up correctly and that you can access it using the provided credentials.
+
+
+```bash
+ftp localhost -p 21
+```
+
+Certainly! You can use the built-in `ftp` command in Ubuntu to test the FTP connection. Open a terminal and follow these steps:
+
+1. Open the FTP client by typing the following command:
+
+```bash
+ftp <your_server_ip_or_hostname>
+```
+
+Replace `<your_server_ip_or_hostname>` with the actual IP address or hostname of your machine where the FTP Docker container is running.
+
+2. You will be prompted to enter the FTP username:
+
+```bash
+Name (your_server_ip_or_hostname:user): your_ftp_user
+```
+
+Replace `your_ftp_user` with the FTP username you specified in your Docker Compose file.
+
+3. Enter the FTP password when prompted:
+
+```bash
+Password: your_ftp_password
+```
+
+Replace `your_ftp_password` with the FTP password you specified in your Docker Compose file.
+
+4. Once connected, you can navigate through directories using standard FTP commands. Here are some basic commands:
+
+   - `ls`: List files in the current directory.
+   - `cd`: Change directory.
+   - `get`: Download a file from the server.
+   - `put`: Upload a file to the server.
+   - `mkdir`: Create a new directory on the server.
+   - `delete` or `rm`: Delete a file on the server.
+   - `rmdir`: Remove a directory on the server.
+
+Here's an example of listing files on the FTP server:
+
+```bash
+ftp> ls
+```
+
+And to download a file:
+
+```bash
+ftp> get filename
+```
+
+Replace `filename` with the actual name of the file you want to download.
+
+After testing, you can exit the FTP session using the `bye` command:
+
+```bash
+ftp> bye
+```
+
+In the context of a vsftpd (Very Secure File Transfer Protocol Daemon) configuration file, the lines:
+
+```conf
+pasv_enable=YES
+pasv_min_port=21100
+pasv_max_port=21110
+```
+
+configure the FTP server to use passive mode for data connections and specify a range of passive mode ports.
+
+Here's an explanation of each line:
+
+1. **`pasv_enable=YES`**:
+   - This line enables passive mode for the FTP server.
+   - In passive mode, the FTP server opens a data channel for transferring files, and the client connects to this channel. This can be useful in scenarios where the client is behind a firewall or NAT, as it allows the client to initiate the data connection.
+
+2. **`pasv_min_port=21100`**:
+   - This line sets the minimum port number for the range of ports that will be used for passive mode data connections.
+   - In this example, the range starts from port 21100.
+
+3. **`pasv_max_port=21110`**:
+   - This line sets the maximum port number for the range of ports used for passive mode data connections.
+   - In this example, the range ends at port 21110.
+
+When a client requests a passive mode connection, the FTP server dynamically selects a port number within the specified range and communicates this port number to the client. The client then connects to that port to transfer data.
+
+The specified port range (21100 to 21110) is often chosen to be within the range of ephemeral ports (typically 1024 to 65535) to avoid conflicts with other well-known ports. It's important to configure your firewall to allow traffic on the specified passive mode port range.
+
+These settings are part of the vsftpd configuration and are designed to enhance the security and flexibility of FTP connections. Passive mode is commonly used in situations where the FTP server is behind a firewall or NAT device.
+
+## Adminer
+
+In nginx
+```nginx
+location ~ ^/adminer(/.*$|$) {
+		fastcgi_index index.php;
+		include /etc/nginx/fastcgi_params;
+		fastcgi_param SCRIPT_FILENAME /var/www/html/index.php;
+		fastcgi_pass adminer:8080;
+	}
+```
+
+```bash
+https://minh-ngu.42.fr/adminer
+```
+
+Server: mariadb
+User: mysql username
+Password: mysql password
+Database: wordpress
