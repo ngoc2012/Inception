@@ -13,8 +13,6 @@ rm latest.tar.gz
 
 echo "End wordpress download"
 
-fi
-
 cp wp-config-sample.php wp-config.php
 
 sed -i "s/username_here/$MYSQL_USER/g" wp-config.php
@@ -28,11 +26,24 @@ wp config set WP_REDIS_PORT 6379 --raw --allow-root
 wp config set WP_CACHE_KEY_SALT $DOMAIN_NAME --allow-root
 #wp config set WP_REDIS_PASSWORD $REDIS_PASSWORD --allow-root
 wp config set WP_REDIS_CLIENT phpredis --allow-root
-wp plugin install redis-cache --activate --allow-root
+#wp plugin install redis-cache --activate --allow-root
+#wp plugin update --all --allow-root
+#wp redis enable --allow-root
+
+# Install WordPress (if not already installed)
+wp core install --url="https://$DOMAIN_NAME" --title="Inception" --admin_user="$WORDPRESS_USER" --admin_password="$WORDPRESS_PWD" --admin_email="minh-ngu@student.42.fr" --allow-root
+
+wp plugin install https://downloads.wordpress.org/plugin/redis-cache.latest-stable.zip --activate --allow-root
 wp plugin update --all --allow-root
+# Next, enable the drop-in:
+
 wp redis enable --allow-root
+# Check the connection:
+wp redis status --allow-root
+
+fi
 
 chown -R www-data:www-data /var/www/html
-chmod -R 755 /var/www/html
+chmod -R 776 /var/www/html
 
 exec "$@"

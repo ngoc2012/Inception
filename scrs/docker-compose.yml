@@ -25,7 +25,7 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
     ports:
-      - 3306:3306
+      - 3306:80
     networks:
       - network
     restart: always
@@ -36,6 +36,7 @@ services:
     container_name: wordpress
     depends_on:
       - mariadb
+      - redis
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
@@ -44,7 +45,7 @@ services:
     env_file:
       - .env
     ports:
-      - 9000:9000
+      - 9000:80
     volumes:
       - wordpress_data:/var/www/html
     networks:
@@ -88,35 +89,13 @@ services:
       context: ./requirements/bonus/redis
       dockerfile: Dockerfile
       no_cache: false
-    depends_on:
-      - wordpress
     ports:
-     - '6379:6379'
+     - '6379:80'
     restart: always
     env_file:
       - .env
-    volumes:
-      - wordpress_data:/var/www/html
     networks:
       - network
-
-  ftp-server:
-    build:
-      context: ./requirements/bonus/ftp_server
-      dockerfile: Dockerfile
-      no_cache: true
-    container_name: ftp-server
-    ports:
-      - "21:21"
-      - "21100-21110:21100-21110"
-    volumes:
-      - "wordpress_data:/var/www/html"
-    networks:
-      - network
-    restart: always
-    environment:
-      FTP_USR: ${FTP_USR}
-      FTP_PWD: ${FTP_PWD}
 
   adminer:
     build: ./requirements/bonus/adminer
@@ -127,6 +106,26 @@ services:
      - "8080"
     networks:
       - network
+
+  ftp-server:
+    build:
+      context: ./requirements/bonus/ftp_server
+      dockerfile: Dockerfile
+      no_cache: false
+    depends_on:
+      - nginx
+      - wordpress
+    container_name: ftp-server
+    ports:
+      - "21:21"
+      - "21100-21110:21100-21110"
+    volumes:
+      - "wordpress_data:/home/${FTP_USR}/uploads"
+    networks:
+      - network
+    restart: always
+    env_file:
+      - .env
 
 volumes:
   wordpress_data:

@@ -1,22 +1,41 @@
 #!/bin/sh
 
-if [ ! -f "/etc/vsftpd/vsftpd.conf.bak" ]; then
+# Define variables
+FTP_USER_HOME="/home/$FTP_USR"
+VSFTPD_USERLIST="/etc/vsftpd.userlist"
+EMPTY_DIR="/usr/share/empty"
 
-    mkdir -p /var/www/html
+# Create the home directory if it doesn't exist
+mkdir -p "$FTP_USER_HOME"
 
-    cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf.bak
-    mv /tmp/vsftpd.conf /etc/vsftpd/vsftpd.conf
+# Create the user
+useradd -m -d "$FTP_USER_HOME" -s /bin/bash "$FTP_USR"
 
-    # Add the FTP_USER, change his password and declare him as the owner of wordpress folder and all subfolders
-    adduser $FTP_USR --disabled-password
-    echo "$FTP_USR:$FTP_PWD" | /usr/sbin/chpasswd &> /dev/null
-    echo "Set owner to folder"
-    chown -R $FTP_USR:$FTP_USR /var/www/html
+# Set the user's password
+echo "$FTP_USR:$FTP_PWD" | chpasswd
 
-	#chmod +x /etc/vsftpd/vsftpd.conf
-    echo $FTP_USR | tee -a /etc/vsftpd.userlist &> /dev/null
+# Assign the user to the group www-data
+usermod -g www-data "$FTP_USR"
 
-fi
+# Set ownership and permissions of the home directory
+chown -R "$FTP_USR:$FTP_USR" "$FTP_USER_HOME"
+chmod 555 "$FTP_USER_HOME"  # Make home directory read-only
 
-echo "FTP started on :21"
-/usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf
+# Create a writable subdirectory for uploads
+mkdir -p "$FTP_USER_HOME/uploads"
+chown -R "$FTP_USR:www-data" "$FTP_USER_HOME/uploads"
+chmod -R 776 "$FTP_USER_HOME/uploads"
+
+# Create the 'empty' directory
+mkdir -p "$EMPTY_DIR"
+chown root:root "$EMPTY_DIR"
+chmod 555 "$EMPTY_DIR"
+
+# Add the user to the vsftpd userlist
+echo "$FTP_USR" >> "$VSFTPD_USERLIST"
+
+# Display a message
+echo "FTP user $FTP_USR created successfully."
+
+# Execute the CMD or ENTRYPOINT command passed to the container
+exec "$@"
