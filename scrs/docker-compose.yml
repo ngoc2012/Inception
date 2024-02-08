@@ -6,7 +6,7 @@ services:
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
-      no_cache: false
+      no_cache: true
     ports:
       - 80:80
       - 443:443
@@ -21,7 +21,7 @@ services:
     build:
       context: ./requirements/mariadb
       dockerfile: Dockerfile
-      no_cache: false
+      no_cache: true
     volumes:
       - mariadb_data:/var/lib/mysql
     ports:
@@ -40,7 +40,7 @@ services:
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
-      no_cache: false
+      no_cache: true
     restart: always
     env_file:
       - .env
@@ -56,7 +56,7 @@ services:
     build:
       context: ./requirements/bonus/pong
       dockerfile: Dockerfile
-      no_cache: false
+      no_cache: true
     restart: always
     env_file:
       - .env
@@ -72,7 +72,7 @@ services:
     build:
       context: ./requirements/bonus/CV
       dockerfile: Dockerfile
-      no_cache: false
+      no_cache: true
     restart: always
     env_file:
       - .env
@@ -88,7 +88,7 @@ services:
     build:
       context: ./requirements/bonus/redis
       dockerfile: Dockerfile
-      no_cache: false
+      no_cache: true
     ports:
      - '6379:80'
     restart: always
@@ -111,7 +111,7 @@ services:
     build:
       context: ./requirements/bonus/ftp_server
       dockerfile: Dockerfile
-      no_cache: false
+      no_cache: true
     depends_on:
       - nginx
       - wordpress

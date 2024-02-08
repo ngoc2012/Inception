@@ -18,6 +18,9 @@ remove_con:
 remove_images:
 	@sudo docker image prune --all --force
 
+remove_volumes:
+	@sudo docker volume rm $$(sudo docker volume ls -q)
+
 remove_folders:
 	@$(shell cd scrs && bash rm_folders.sh)
 
@@ -31,6 +34,8 @@ format:
 re:
 	@make down
 	@make remove_images
+	@make remove_con
+	@make remove_volumes
 	@make up
 
 clean:
