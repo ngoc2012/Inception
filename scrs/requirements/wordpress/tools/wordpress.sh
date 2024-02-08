@@ -40,6 +40,7 @@ wp plugin update --all --allow-root
 wp redis enable --allow-root
 # Check the connection:
 wp redis status --allow-root
+wp option update show_on_front 'page' --quiet --allow-root
 
 fi
 
