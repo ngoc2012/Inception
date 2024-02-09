@@ -1,19 +1,19 @@
 ENV := srcs/.env
 
 all:
-    @ifeq ($(wildcard $(ENV)),)
-        $(error File $(ENV) not found. Aborting.)
-    else
-		@sudo docker compose -f ./scrs/docker-compose.yml up -d --build
-		@sudo docker compose -f ./scrs/docker-compose.yml logs -f
-    endif
+	ls srcs
+	@if [ -f $(ENV) ]; then \
+		@sudo docker compose -f ./srcs/docker-compose.yml up -d --build
+		@sudo docker compose -f ./srcs/docker-compose.yml logs -f
+	else
+		$(error File $(ENV) not found. Aborting.)
 
 down:
-	@sudo docker compose -f ./scrs/docker-compose.yml down
+	@sudo docker compose -f ./srcs/docker-compose.yml down
 
 up:
-	@sudo docker compose -f scrs/docker-compose.yml up -d --build
-	@sudo docker compose -f ./scrs/docker-compose.yml logs -f
+	@sudo docker compose -f ./srcs/docker-compose.yml up -d --build
+	@sudo docker compose -f ./srcs/docker-compose.yml logs -f
 
 stop:
 	@sudo docker stop $$(sudo docker ps)
@@ -50,9 +50,6 @@ gits:
 	git add srcs/requirements/*
 	git commit -m "final"
 	git push
-
-env:
-	@$(shell cd scrs && bash rm_folders.sh)
 
 clean:
 	@sudo docker stop $$(docker ps -qa);\
