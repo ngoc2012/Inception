@@ -1,7 +1,6 @@
 ENV := srcs/.env
 
 all:
-	ls srcs
 	@if [ -f $(ENV) ]; then \
 		@sudo docker compose -f ./srcs/docker-compose.yml up -d --build
 		@sudo docker compose -f ./srcs/docker-compose.yml logs -f
