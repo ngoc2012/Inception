@@ -9,6 +9,7 @@ down:
 	@sudo docker compose -f ./srcs/docker-compose.yml down
 
 up:
+	@$(shell cd srcs && bash env.sh)
 	@sudo docker compose -f ./srcs/docker-compose.yml up -d --build
 	@sudo docker compose -f ./srcs/docker-compose.yml logs -f
 
@@ -49,10 +50,10 @@ gits:
 	git push
 
 clean:
-	@sudo docker stop $$(docker ps -qa);\
-	sudo docker rm $$(docker ps -qa);\
-	sudo docker rmi -f $$(docker images -qa);\
-	sudo docker volume rm $$(docker volume ls -q);\
-	sudo docker network rm $$(docker network ls -q);\
+	@sudo docker stop $$(docker ps -qa)
+	@sudo docker rm $$(docker ps -qa)
+	@sudo docker rmi -f $$(docker images -qa)
+	@sudo docker volume rm $$(docker volume ls -q)
+	@sudo docker network rm $$(docker network ls -q)
 
 .PHONY: all re down clean
