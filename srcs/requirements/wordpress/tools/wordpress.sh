@@ -14,6 +14,7 @@ rm latest.tar.gz
 echo "End wordpress download"
 
 cp wp-config-sample.php wp-config.php
+cp /usr/local/bin/hide-toolbar.php wp-content/plugins
 
 sed -i "s/username_here/$MYSQL_USER/g" wp-config.php
 sed -i "s/password_here/$MYSQL_PASSWORD/g" wp-config.php

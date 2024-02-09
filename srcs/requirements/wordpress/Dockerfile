@@ -25,6 +25,7 @@ COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
 RUN mkdir /run/php
 
 COPY ./tools/wordpress.sh /usr/local/bin/
+COPY ./tools/hide-toolbar.php /usr/local/bin/
 RUN chmod +x /usr/local/bin/wordpress.sh
 ENTRYPOINT ["/usr/local/bin/wordpress.sh"]
 

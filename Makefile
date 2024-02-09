@@ -1,6 +1,12 @@
+ENV := srcs/.env
+
 all:
-	@sudo docker compose -f ./scrs/docker-compose.yml up -d --build
-	@sudo docker compose -f ./scrs/docker-compose.yml logs -f
+    @ifeq ($(wildcard $(ENV)),)
+        $(error File $(ENV) not found. Aborting.)
+    else
+		@sudo docker compose -f ./scrs/docker-compose.yml up -d --build
+		@sudo docker compose -f ./scrs/docker-compose.yml logs -f
+    endif
 
 down:
 	@sudo docker compose -f ./scrs/docker-compose.yml down
@@ -22,10 +28,10 @@ remove_volumes:
 	@sudo docker volume rm $$(sudo docker volume ls -q)
 
 remove_folders:
-	@$(shell cd scrs && bash rm_folders.sh)
+	@$(shell cd srcs && bash rm_folders.sh)
 
 create_folders:
-	@$(shell cd scrs && bash create_folders.sh)
+	@$(shell cd srcs && bash create_folders.sh)
 
 format:
 	@make remove_folders
@@ -40,10 +46,13 @@ re:
 
 gits:
 	git add Makefile
-	git add *.cpp
-	git add *.hpp
-	git commit -m "all"
+	git add srcs/docker-compose.yml
+	git add srcs/requirements/*
+	git commit -m "final"
 	git push
+
+env:
+	@$(shell cd scrs && bash rm_folders.sh)
 
 clean:
 	@sudo docker stop $$(docker ps -qa);\

@@ -1,11 +1,3 @@
-# Read enviroments variables
-#while read -r LINE; do
-#    if [[ $LINE == *'='* ]] && [[ $LINE != '#'* ]]; then
-#        ENV_VAR="$(echo $LINE | envsubst)"
-#        eval "declare $ENV_VAR"
-#    fi
-#done < .env
-
 # Load environment variables from .env file
 if [ -f .env ]; then
   source .env
