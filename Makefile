@@ -38,6 +38,13 @@ re:
 	@make remove_volumes
 	@make up
 
+gits:
+	git add Makefile
+	git add *.cpp
+	git add *.hpp
+	git commit -m "all"
+	git push
+
 clean:
 	@sudo docker stop $$(docker ps -qa);\
 	sudo docker rm $$(docker ps -qa);\
