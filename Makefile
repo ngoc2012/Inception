@@ -1,12 +1,10 @@
 ENV := srcs/.env
 
 all:
-	@if [ -f $(ENV) ]; then \
-		@sudo docker compose -f ./srcs/docker-compose.yml up -d --build
-		@sudo docker compose -f ./srcs/docker-compose.yml logs -f
-	else
-		$(error File $(ENV) not found. Aborting.)
-
+	@$(shell cd srcs && bash env.sh)
+	@sudo docker compose -f ./srcs/docker-compose.yml up -d --build
+	@sudo docker compose -f ./srcs/docker-compose.yml logs -f
+	
 down:
 	@sudo docker compose -f ./srcs/docker-compose.yml down
 
